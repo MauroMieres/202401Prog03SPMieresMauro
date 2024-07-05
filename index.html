@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Personas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Gestión de Personas</h1>
+    <label for="filter">Filtrar por:</label>
+    <select id="filter" onchange="updateTable()">
+        <option value="all">Todos</option>
+        <option value="ciudadanos">Ciudadanos</option>
+        <option value="extranjeros">Extranjeros</option>
+    </select>
+
+    <button onclick="showForm()">Agregar Persona</button>
+
+    <div id="spinner" class="spinner" style="display:none;"></div>
+
+    <table>
+        <thead id="tableHeader"></thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <div id="formPopup" class="form-popup">
+        <form id="personForm" class="form-container">
+            <h2 id="formTitle">Agregar Persona</h2>
+            <label for="nombre"><b>Nombre</b></label>
+            <input type="text" id="nombre" name="nombre" required>
+            
+            <label for="apellido"><b>Apellido</b></label>
+            <input type="text" id="apellido" name="apellido" required>
+            
+            <label for="fechaNacimiento"><b>Fecha de Nacimiento</b></label>
+            <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+            
+            <label for="dni" id="dniLabel" style="display:none;"><b>DNI</b></label>
+            <input type="text" id="dni" name="dni" style="display:none;">
+            
+            <label for="paisOrigen" id="paisOrigenLabel" style="display:none;"><b>País de Origen</b></label>
+            <input type="text" id="paisOrigen" name="paisOrigen" style="display:none;">
+            
+            <button type="submit">Guardar</button>
+            <button type="button" id="closeButton">Cerrar</button>
+        </form>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
