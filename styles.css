@@ -10,6 +10,7 @@
   top: 50%;
   left: 50%;
   margin: -60px 0 0 -60px;
+  z-index: 9999; /* Asegura que esté sobre otros elementos */
 }
 
 @keyframes spin {
@@ -24,40 +25,88 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 3px solid #f1f1f1;
-  z-index: 9;
-}
-
-.form-container {
-  max-width: 300px;
+  border: 3px solid #ccc;
+  background-color: #fff;
   padding: 20px;
-  background-color: white;
+  max-width: 400px;
+  width: 90%;
+  z-index: 9999; /* Asegura que esté sobre otros elementos */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
 }
 
-.form-container input[type="text"], .form-container input[type="date"] {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: #f1f1f1;
+/* Estilos para la tabla */
+table {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
 }
 
-.form-container input[type="text"]:focus, .form-container input[type="date"]:focus {
-  background-color: #ddd;
-  outline: none;
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
-.form-container button[type="submit"], .form-container button[type="button"] {
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9; /* Fondo gris claro para filas pares */
+}
+
+/* Estilos para los botones */
+button {
   background-color: #04AA6D;
   color: white;
-  padding: 16px 20px;
+  padding: 10px 20px;
   border: none;
   cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
+  margin-right: 5px;
+  transition: background-color 0.3s ease; /* Transición suave */
 }
 
-.form-container button[type="submit"]:hover, .form-container button[type="button"]:hover {
-  opacity: 1;
+button:hover {
+  background-color: #3e8e41; /* Color más oscuro al pasar el mouse */
+}
+
+/* Estilos específicos para los botones Modificar y Eliminar */
+.modify-button {
+  background-color: #2196F3; /* Azul */
+}
+
+.delete-button {
+  background-color: #f44336; /* Rojo */
+}
+
+/* Otros estilos */
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+input[type="text"], input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="text"]:focus, input[type="date"]:focus {
+  outline: none;
+  border-color: #04AA6D; /* Color de borde al enfocar */
+}
+
+/* Estilo para el botón de cerrar */
+#closeButton {
+  background-color: #f44336; /* Rojo */
+  float: right;
+}
+
+#closeButton:hover {
+  background-color: #cc0000; /* Color más oscuro al pasar el mouse */
+  color: white;
 }

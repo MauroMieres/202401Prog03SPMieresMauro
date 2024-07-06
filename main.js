@@ -88,71 +88,77 @@ document.addEventListener('DOMContentLoaded', () => {
   // Variables globales para manejar la edición y eliminación
   let editingId = null; // ID de la persona en edición
 
-  // Función para actualizar la tabla según la selección del filtro
-  window.updateTable = function() {
-    const filter = document.getElementById("filter").value;
-    const tableHeader = document.getElementById("tableHeader");
-    const tableBody = document.getElementById("tableBody");
+// Función para actualizar la tabla según la selección del filtro
+window.updateTable = function() {
+  const filter = document.getElementById("filter").value;
+  const tableHeader = document.getElementById("tableHeader");
+  const tableBody = document.getElementById("tableBody");
+  const addButton = document.getElementById("addButton");
 
-    // Limpiar la tabla antes de actualizar
-    tableHeader.innerHTML = "";
-    tableBody.innerHTML = "";
+  // Limpiar la tabla antes de actualizar
+  tableHeader.innerHTML = "";
+  tableBody.innerHTML = "";
 
-    // Determinar qué columnas mostrar según la selección del filtro
-    let columnsToShow = [];
-    if (filter === "all") {
-      columnsToShow = ["id", "nombre", "apellido", "fechaNacimiento", "dni", "paisOrigen", "actions"];
-    } else if (filter === "ciudadanos") {
-      columnsToShow = ["id", "nombre", "apellido", "fechaNacimiento", "dni", "modify", "delete"];
-    } else if (filter === "extranjeros") {
-      columnsToShow = ["id", "nombre", "apellido", "fechaNacimiento", "paisOrigen", "modify", "delete"];
-    }
-
-    // Crear cabecera de tabla
-    const headerRow = document.createElement("tr");
-    columnsToShow.forEach(column => {
-      const headerCell = document.createElement("th");
-      headerCell.textContent = getColumnHeader(column);
-      headerRow.appendChild(headerCell);
-    });
-    tableHeader.appendChild(headerRow);
-   
-    // Llenar cuerpo de tabla con datos filtrados
-    personas.forEach(persona => {
-      if ((filter === "ciudadanos" && persona.dni !== undefined) ||
-          (filter === "extranjeros" && persona.paisOrigen !== undefined) ||
-          (filter === "all")) {
-        const row = document.createElement("tr");
-        columnsToShow.forEach(column => {
-          const cell = document.createElement("td");
-          if (column === "actions") {
-            const modifyButton = document.createElement("button");
-            modifyButton.innerHTML = "Modificar";
-            modifyButton.addEventListener("click", () => showModifyForm(persona));
-            const deleteButton = document.createElement("button");
-            deleteButton.innerHTML = "Eliminar";
-            deleteButton.addEventListener("click", () => confirmDelete(persona.id));
-            cell.appendChild(modifyButton);
-            cell.appendChild(deleteButton);
-          } else if (column === "modify") {
-            const modifyButton = document.createElement("button");
-            modifyButton.innerHTML = "Modificar";
-            modifyButton.addEventListener("click", () => showModifyForm(persona));
-            cell.appendChild(modifyButton);
-          } else if (column === "delete") {
-            const deleteButton = document.createElement("button");
-            deleteButton.innerHTML = "Eliminar";
-            deleteButton.addEventListener("click", () => confirmDelete(persona.id));
-            cell.appendChild(deleteButton);
-          } else {
-            cell.textContent = persona[column] || ""; // Mostrar valor o celda vacía si no existe
-          }
-          row.appendChild(cell);
-        });
-        tableBody.appendChild(row);
-      }
-    });
+  // Determinar qué columnas mostrar según la selección del filtro
+  let columnsToShow = [];
+  if (filter === "all") {
+    columnsToShow = ["id", "nombre", "apellido", "fechaNacimiento", "dni", "paisOrigen", "actions"];
+    addButton.style.display = "none"; // Ocultar el botón de agregar
+  } else if (filter === "ciudadanos") {
+    columnsToShow = ["id", "nombre", "apellido", "fechaNacimiento", "dni", "modify", "delete"];
+    addButton.style.display = "block"; // Mostrar el botón de agregar
+  } else if (filter === "extranjeros") {
+    columnsToShow = ["id", "nombre", "apellido", "fechaNacimiento", "paisOrigen", "modify", "delete"];
+    addButton.style.display = "block"; // Mostrar el botón de agregar
   }
+
+  // Crear cabecera de tabla
+  const headerRow = document.createElement("tr");
+  columnsToShow.forEach(column => {
+    const headerCell = document.createElement("th");
+    headerCell.textContent = getColumnHeader(column);
+    headerRow.appendChild(headerCell);
+  });
+  tableHeader.appendChild(headerRow);
+
+  // Llenar cuerpo de tabla con datos filtrados
+  personas.forEach(persona => {
+    if ((filter === "ciudadanos" && persona.dni !== undefined) ||
+        (filter === "extranjeros" && persona.paisOrigen !== undefined) ||
+        (filter === "all")) {
+      const row = document.createElement("tr");
+      columnsToShow.forEach(column => {
+        const cell = document.createElement("td");
+        if (column === "actions") {
+          const modifyButton = document.createElement("button");
+          modifyButton.innerHTML = "Modificar";
+          modifyButton.addEventListener("click", () => showModifyForm(persona));
+          const deleteButton = document.createElement("button");
+          deleteButton.innerHTML = "Eliminar";
+          deleteButton.addEventListener("click", () => confirmDelete(persona.id));
+          cell.appendChild(modifyButton);
+          cell.appendChild(deleteButton);
+        } else if (column === "modify") {
+          const modifyButton = document.createElement("button");
+          modifyButton.innerHTML = "Modificar";
+          modifyButton.addEventListener("click", () => showModifyForm(persona));
+          cell.appendChild(modifyButton);
+        } else if (column === "delete") {
+          const deleteButton = document.createElement("button");
+          deleteButton.innerHTML = "Eliminar";
+          deleteButton.addEventListener("click", () => confirmDelete(persona.id));
+          cell.appendChild(deleteButton);
+        } else {
+          cell.textContent = persona[column] || ""; // Mostrar valor o celda vacía si no existe
+        }
+        row.appendChild(cell);
+      });
+      tableBody.appendChild(row);
+    }
+  });
+}
+
+
 
   window.showForm = function(isEdit = false) {
     const filter = document.getElementById("filter").value;
@@ -177,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("dni").style.display = "none";
         document.getElementById("paisOrigen").style.display = "none";
     }
+
 }
 
 
@@ -186,67 +193,95 @@ document.addEventListener('DOMContentLoaded', () => {
     // Limpiar campos del formulario al cerrar
     document.getElementById("personForm").reset();
     editingId = null; // Resetear el ID de edición
+
+    document.getElementById("dniLabel").style.display = "none";
+    document.getElementById("paisOrigenLabel").style.display = "none";
   }
 
   document.getElementById("closeButton").addEventListener("click", closeForm);
 
-// Evento al enviar el formulario de persona
-document.getElementById("personForm").addEventListener("submit", async function(event) {
-  event.preventDefault();
-
-  const formData = new FormData(event.target);
-  const nombre = formData.get("nombre");
-  const apellido = formData.get("apellido");
-  const fechaNacimiento = formatFechaNacimiento(formData.get("fechaNacimiento"));
-  const dni = formData.get("dni");
-  const paisOrigen = formData.get("paisOrigen");
-
-  const newPerson = {
-    id: editingId !== null ? editingId : Date.now(),
-    nombre,
-    apellido,
-    fechaNacimiento,
-    ...(dni ? { dni } : {}), // Usar operador ternario para incluir dni si está presente
-    ...(paisOrigen ? { paisOrigen } : {}) // Usar operador ternario para incluir paisOrigen si está presente
-  };
-
-  try {
-    if (editingId !== null) {
-      // Editar persona existente
-      const personToUpdate = personas.find(person => person.id === editingId);
-      if (personToUpdate) {
-        // Ocultar formulario de edición
-        document.getElementById("formPopup").style.display = "none";
-
-        // Realizar la edición y esperar la respuesta
-        const updatedPersons = await editPersonPromise(personToUpdate, newPerson);
-        personas = updatedPersons;
-        updateTable();
-      }
-    } else {
-      // Agregar nueva persona
-      personas.push(newPerson);
-      updateTable();
+  document.getElementById("personForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+  
+    const formData = new FormData(event.target);
+    const nombre = formData.get("nombre");
+    const apellido = formData.get("apellido");
+    const fechaNacimiento = formData.get("fechaNacimiento");
+    const dni = formData.get("dni");
+    const paisOrigen = formData.get("paisOrigen");
+  
+    // Validaciones
+    if (!nombre.match(/^[a-zA-Z\s]*$/)) {
+      alert("El nombre solo debe contener letras y espacios.");
+      return;
     }
-  } catch (error) {
-    console.error(error.message);
-    // Manejar el error como se requiera
-  } finally {
-    // Limpiar campos del formulario al finalizar
-    document.getElementById("personForm").reset();
-    editingId = null; // Resetear el ID de edición
-  }
-});
+    
+    if (!apellido.match(/^[a-zA-Z\s]*$/)) {
+      alert("El apellido solo debe contener letras y espacios.");
+      return;
+    }
+    
+    const today = new Date();
+    const selectedDate = new Date(fechaNacimiento);
+    if (selectedDate >= today) {
+      alert("La fecha de nacimiento debe ser anterior a la fecha actual.");
+      return;
+    }
+    
+    if (dni && (!(/^\d+$/.test(dni)) || dni <= 0)) {
+      alert("El DNI debe ser un número mayor a cero.");
+      return;
+    }
+  
+    const newPerson = {
+      id: editingId !== null ? editingId : Date.now(),
+      nombre,
+      apellido,
+      fechaNacimiento: formatFechaNacimiento(fechaNacimiento),
+      ...(dni ? { dni } : {}),
+      ...(paisOrigen ? { paisOrigen } : {})
+    };
+  
+    try {
+      if (editingId !== null) {
+        const personToUpdate = personas.find(person => person.id === editingId);
+        if (personToUpdate) {
+          document.getElementById("formPopup").style.display = "none";
+          const updatedPersons = await editPersonPromise(personToUpdate, newPerson);
+          personas = updatedPersons;
+          updateTable();
+        }
+      } else {
+        document.getElementById("formPopup").style.display = "none";
+        spinner.style.display = "block";
+        // Llamar a altaElemento para agregar un nuevo elemento
+        const response = await altaElemento(newPerson);
+        if (response === 'Exito') {   
+          spinner.style.display = "none";   
+          personas.push(newPerson);
+          updateTable();
+        }
+      }
+    } catch (error) {
+      console.error(error.message);
+      alert("Hubo un error al guardar los datos.");
+    } finally {
+      document.getElementById("personForm").reset();
+      editingId = null;
+    }
+  });
+  
 
 
 window.showModifyForm = function(persona) {
   // Detectar tipo de persona para mostrar los campos correspondientes
   if (persona.dni) {
-      document.getElementById("dni").style.display = "block";
+      document.getElementById("dniLabel").style.display = "block";
       document.getElementById("paisOrigen").style.display = "none";
   } else if (persona.paisOrigen) {
+    console.log("Persona extranjera");
       document.getElementById("dni").style.display = "none";
-      document.getElementById("paisOrigen").style.display = "block";
+      document.getElementById("paisOrigenLabel").style.display = "block";
   } else {
       document.getElementById("dni").style.display = "none";
       document.getElementById("paisOrigen").style.display = "none";
@@ -342,6 +377,8 @@ const callServiceXHR = (callback) => {
 const callServiceFetchAsync = async (data, method) => {
   spinner.style.display = "block";
 
+  console.log(data);
+
   try {
     const response = await fetch(endpoint, {
       method: method,
@@ -365,19 +402,17 @@ const callServiceFetchAsync = async (data, method) => {
   }
 };
 
-// Función para editar una persona usando promesas con manejo de spinner
 const editPersonPromise = (personToUpdate, newPersonData) => {
   const spinner = document.getElementById("spinner");
-  spinner.style.display = "block"; // Mostrar el spinner al comenzar la solicitud
+  spinner.style.display = "block";
 
   return new Promise((resolve, reject) => {
     callServiceFetchAsync(newPersonData, 'PUT')
       .then(response => {
         console.log(response);
-        spinner.style.display = "none"; // Ocultar el spinner al recibir la respuesta
+        spinner.style.display = "none";
 
         if (response === 'Exito') {
-          // Actualizar persona localmente
           const updatedPersons = personas.map(person => person.id === personToUpdate.id ? newPersonData : person);
           resolve(updatedPersons);
         } else {
@@ -385,18 +420,54 @@ const editPersonPromise = (personToUpdate, newPersonData) => {
         }
       })
       .catch(error => {
-        spinner.style.display = "none"; // Ocultar el spinner en caso de error
-        reject(error); // Propagar el error para que sea manejado externamente
+        spinner.style.display = "none";
+        reject(error);
       });
   });
 };
 
+
 const altaElemento = async (data) => {
-    try {
-        const response = await callServiceFetchAsync(data, 'POST');
-        return response; // Devolver la respuesta del servidor
-    } catch (error) {
-        console.error('Error en altaElemento:', error);
-        throw error; // Propagar el error para manejarlo externamente si es necesario
+  try {
+    // Validar que la fecha de nacimiento no sea mayor al día actual
+    const fechaNacimiento = new Date(data.fechaNacimiento);
+    const fechaActual = new Date();
+    if (fechaNacimiento >= fechaActual) {
+      throw new Error("La fecha de nacimiento debe ser anterior a la fecha actual.");
     }
+
+    // Validar que nombre y apellido contengan solo letras y no estén vacíos
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(data.nombre.trim())) {
+      throw new Error("El nombre sólo puede contener letras.");
+    }
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(data.apellido.trim())) {
+      throw new Error("El apellido sólo puede contener letras.");
+    }
+
+    // Validar que DNI contenga solo números y sea mayor a cero si está presente
+    if (data.dni && (!/^\d+$/.test(data.dni.trim()) || parseInt(data.dni.trim()) <= 0)) {
+      throw new Error("El DNI debe contener sólo números mayores a cero.");
+    }
+
+    // Construir el objeto JSON a enviar, excluyendo el campo ID
+    const requestData = {
+      apellido: data.apellido.trim(),
+      nombre: data.nombre.trim(),
+      fechaNacimiento: (data.fechaNacimiento),
+      ...(data.dni ? { dni: data.dni.trim() } : {}),
+      ...(data.paisOrigen ? { paisOrigen: data.paisOrigen.trim() } : {})
+    };
+
+    console.log(requestData);
+
+    // Realizar la llamada al servicio usando fetch
+    const response = await callServiceFetchAsync(requestData, 'POST');
+
+    return response; // Devolver la respuesta del servidor
+  } catch (error) {
+    console.error('Error en altaElemento:', error);
+    throw error; // Propagar el error para manejarlo externamente si es necesario
+  }
 };
+
+
