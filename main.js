@@ -160,30 +160,41 @@ window.updateTable = function() {
 
 
 
-  window.showForm = function(isEdit = false) {
-    const filter = document.getElementById("filter").value;
-    const formPopup = document.getElementById("formPopup");
-    formPopup.style.display = "block";
+window.showForm = function(isEdit = false) {
+  const filter = document.getElementById("filter").value;
+  const formPopup = document.getElementById("formPopup");
+  formPopup.style.display = "block";
 
-    // Mostrar título correcto
-    if (isEdit) {
-        document.getElementById("formTitle").textContent = "Modificar Persona";
-    } else {
-        document.getElementById("formTitle").textContent = "Agregar Persona";
-    }
+  // Mostrar título adecuado
+  if (isEdit) {
+    document.getElementById("formTitle").textContent = "Modificar Persona";
+  } else {
+    // Mostrar título "Agregar Persona"
+    document.getElementById("formTitle").textContent = "Agregar Persona";
+  }
 
-    // Mostrar campos correspondientes al filtro seleccionado
-    if (filter === "ciudadanos" || (filter === "all" && document.getElementById("dni").style.display === "block")) {
-        document.getElementById("dni").style.display = "block";
-        document.getElementById("paisOrigen").style.display = "none";
-    } else if (filter === "extranjeros" || (filter === "all" && document.getElementById("paisOrigen").style.display === "block")) {
-        document.getElementById("dni").style.display = "none";
-        document.getElementById("paisOrigen").style.display = "block";
-    } else {
-        document.getElementById("dni").style.display = "none";
-        document.getElementById("paisOrigen").style.display = "none";
-    }
-
+  // Mostrar campos correspondientes al filtro seleccionado
+  if (filter === "ciudadanos" || filter === "all") {
+    document.getElementById("dni").style.display = "block";
+    document.getElementById("paisOrigen").style.display = "none";
+    // Mostrar etiqueta "DNI"
+    document.getElementById("dniLabel").style.display = "block";
+    // Ocultar etiqueta "País de Origen"
+    document.getElementById("paisOrigenLabel").style.display = "none";
+  } else if (filter === "extranjeros") {
+    document.getElementById("dni").style.display = "none";
+    document.getElementById("paisOrigen").style.display = "block";
+    // Ocultar etiqueta "DNI"
+    document.getElementById("dniLabel").style.display = "none";
+    // Mostrar etiqueta "País de Origen"
+    document.getElementById("paisOrigenLabel").style.display = "block";
+  } else {
+    // Ocultar ambos campos y etiquetas si no hay filtro seleccionado
+    document.getElementById("dni").style.display = "none";
+    document.getElementById("paisOrigen").style.display = "none";
+    document.getElementById("dniLabel").style.display = "none";
+    document.getElementById("paisOrigenLabel").style.display = "none";
+  }
 }
 
 
